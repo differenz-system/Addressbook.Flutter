@@ -35,7 +35,7 @@ The app does the following:
 - **Framework:** Flutter
 
 ## Screenshots
-<img src="https://github.com/differenz-system/AddressBook.Flutter/blob/master/ScreenShots/login.jpeg" width="280"> <img src="https://github.com/differenz-system/AddressBook.Flutter/blob/master/ScreenShots/list.jpeg" width="280"> <img src="https://github.com/differenz-system/AddressBook.Flutter/blob/master/ScreenShots/detail.jpeg" width="280">
+<img src="https://github.com/differenz-system/AddressBook.Flutter/blob/master/ScreenShots/login.jpeg" width="280"> <img src="https://github.com/differenz-system/AddressBook.Flutter/blob/master/ScreenShots/list.jpeg" width="280"> <img src="https://github.com/differenz-system/AddressBook.Flutter/blob/master/ScreenShots/details.jpeg" width="280">
 
 ## Support
 If you've found an error in this sample, please [report an issue](https://github.com/differenz-system/Addressbook.Flutter/issues/new). You can also send your feedback and suggestions at info@differenzsystem.com
