@@ -19,11 +19,15 @@
     "Flutter": [
 
     ],
+    "FBSDKCoreKit": [
+      "~> 5.5"
+    ],
     "FBSDKLoginKit": [
-      "~> 4.29"
+      "~> 5.5"
     ]
   },
+  "static_framework": true,
   "platforms": {
-    "ios": "8.0"
+    "ios": "9.0"
   }
 }

@@ -1,26 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:addressbook_flutter/src/login/SplashScreen.dart';
-import 'package:addressbook_flutter/src/login/Login.dart';
-import 'package:addressbook_flutter/src/home/HomeScreen.dart';
-import 'package:addressbook_flutter/src/home/UpdateScreen.dart';
-import 'package:addressbook_flutter/src/utils/globals.dart' as globals;
-
+import './src/utils/globals.dart' as globals;
+import './src/login/SplashScreen.dart';
+import './src/login/Login.dart';
+import './src/home/HomeScreen.dart';
+import './src/home/UpdateScreen.dart';
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(new MaterialApp(
-      theme: new ThemeData(
+    runApp( MaterialApp(
+      theme:  ThemeData(
         primaryColor: globals.greenThemeColor,
       ),
-      home: new SplashScreen(),
+      debugShowCheckedModeBanner: false,
+      home:  SplashScreen(),
       routes: <String, WidgetBuilder>{
-        '/Splash': (BuildContext context) => new SplashScreen(),
-        '/Login': (BuildContext context) => new Login(),
-        '/Home': (BuildContext context) => new HomeScreen(),
-        '/Update': (BuildContext context) => new UpdateScreen(
-              addressbooks: null,
-            ),
+        '/Splash': (BuildContext context) =>  SplashScreen(),
+        '/Login': (BuildContext context) =>  Login(),
+        '/Home': (BuildContext context) =>  HomeScreen(),
+        '/Update': (BuildContext context) =>  UpdateScreen(
+          addressbooks: null,
+        ),
       },
     ));
   });

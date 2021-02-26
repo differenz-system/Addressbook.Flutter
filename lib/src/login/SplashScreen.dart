@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
-  _SplashPageState createState() => new _SplashPageState();
+  _SplashPageState createState() =>  _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashScreen> {
@@ -22,8 +22,8 @@ class _SplashPageState extends State<SplashScreen> {
   }
 
   startTime() async {
-    var _duration = new Duration(seconds: 1);
-    return new Timer(
+    var _duration =  Duration(seconds: 1);
+    return  Timer(
         _duration,
         (user_email == null || user_email.isEmpty)
             ? navigationLoginPage
@@ -39,12 +39,12 @@ class _SplashPageState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new Scaffold(
+    return  Scaffold(
       body: Center(
         child: Text(
           'AddressBook',
           textAlign: TextAlign.center,
-          style: new TextStyle(
+          style:  TextStyle(
               color: Colors.black, fontSize: 20.0, fontWeight: FontWeight.bold),
         ),
       ),

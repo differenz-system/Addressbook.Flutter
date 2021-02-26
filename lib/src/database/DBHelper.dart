@@ -1,100 +1,80 @@
-import 'dart:async';
-import 'dart:io' as io;
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:addressbook_flutter/src/model/AddressBook.dart';
+import 'dart:async';
+import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-
+import 'package:addressbook_flutter/src/model/AddressBook.dart';
 class DBHelper {
+  static final DBHelper _dbHelper = DBHelper._internal();
+  String tblAddressBook = "AddressBook";
+  String colId = "id";
+  String colName = "name";
+  String colEmail = "email";
+  String colContactUs = "contact_number";
+  String colIsActive = "isactive";
+
+  DBHelper._internal();
+
+  factory DBHelper(){
+    return _dbHelper;
+  }
+
+
   static Database _db;
 
   Future<Database> get db async {
-    if (_db != null) return _db;
-    _db = await initDb();
+    if (_db == null) {
+      _db = await initializeDb();
+    }
     return _db;
   }
 
-  //Creating a database with name addressbook.db in your directory
-  initDb() async {
-    io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "addressbook.db");
-    var theDb = await openDatabase(path, version: 1, onCreate: _onCreate);
-    return theDb;
+  Future<Database> initializeDb() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    String path = dir.path + "addressbook.db";
+    var dbTodos = await openDatabase(path, version: 1, onCreate: _createDb);
+    return dbTodos;
   }
 
-  // Creating a table name Employee with fields
-  void _onCreate(Database db, int version) async {
-    // When creating the db, create the table
-    await db.execute(
-        "CREATE TABLE AddressBook(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT, contact_number TEXT, isactive INTEGER )");
-    print("Created tables");
+  void _createDb(Database db, int newVersion) async {
+    String sql = "CREATE TABLE $tblAddressBook($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colName TEXT, " +
+        "$colEmail TEXT,$colContactUs TEXT, $colIsActive INTEGER)";
+    await db.execute(sql);
   }
 
-  // Retrieving employees from Employee Tables
-  Future<List<AddressBook>> getAddressBooks() async {
-    var dbClient = await db;
-    List<Map> list = await dbClient.rawQuery('SELECT * FROM AddressBook');
-    List<AddressBook> addressbooks = new List();
-    for (int i = 0; i < list.length; i++) {
-      addressbooks.add(new AddressBook(list[i]["id"], list[i]["name"],
-          list[i]["email"], list[i]["contact_number"], list[i]["isactive"]));
-    }
-    print(addressbooks.length);
-    return addressbooks;
+  Future<int> insertAddressBook(AddressBook addressBook) async {
+    Database db = await this.db;
+    var result = await db.insert(tblAddressBook, addressBook.toMap());
+    return result;
   }
 
-    /*
-     * insert data into db
-     */
-  void saveAddressBook(AddressBook employee) async {
-    var dbClient = await db;
-    await dbClient.transaction((txn) async {
-      return await txn.rawInsert(
-          'INSERT INTO AddressBook(name, email, contact_number, isactive ) VALUES(' +
-              '\'' +
-              employee.name +
-              '\'' +
-              ',' +
-              '\'' +
-              employee.email +
-              '\'' +
-              ',' +
-              '\'' +
-              employee.contact_number +
-              '\'' +
-              ',' +
-              '\'' +
-              employee.isactive.toString() +
-              '\'' +
-              ')');
-    });
+  Future<List> getAddressBooks() async {
+    Database db = await this.db;
+    var result = await db.rawQuery(
+        "SELECT * from $tblAddressBook order by $colId DESC");
+    return result;
   }
 
-    /*
-     * update the data in db
-     */
-  void updateAddressBook(AddressBook employee, int _id) async {
-    var dbClient = await db;
-    await dbClient.transaction((txn) async {
-      return await txn.rawUpdate(
-          'UPDATE AddressBook SET name = ?, email = ?, contact_number = ?, isactive = ? WHERE id = ?',
-          [
-            employee.name,
-            employee.email,
-            employee.contact_number,
-            employee.isactive.toString(),
-            _id
-          ]);
-    });
+  Future<int> getCount(AddressBook addressBook) async {
+    Database db = await this.db;
+    var result = Sqflite.firstIntValue(
+        await db.rawQuery("SELECT COUNT(*) FROM $tblAddressBook")
+    );
+
+    return result;
   }
 
-    /*
-     * delete data in db
-     */
-  void deleteAddressBook(int _id) async {
-    var dbClient = await db;
-    await dbClient.transaction((txn) async {
-      return await txn.rawDelete('DELETE FROM AddressBook WHERE id = ?', [_id]);
-    });
+  Future<int> updateAddressBook(AddressBook addressBook, int id) async {
+    Database db = await this.db;
+    var result = await db.update(
+        tblAddressBook, addressBook.toMap(), where: "$colId = $id", whereArgs: [addressBook.id]);
+    return result;
   }
+
+  Future<int> deleteAddressBook(int id) async {
+    Database db = await this.db;
+    int result;
+    result = await db.rawDelete("DELETE FROM $tblAddressBook WHERE $colId = $id");
+    return result;
+  }
+
 }

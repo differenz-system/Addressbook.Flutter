@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:addressbook_flutter/src/login/Login.dart';
 import 'package:addressbook_flutter/src/home/UpdateScreen.dart';
@@ -9,43 +10,35 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
-  _HomePageState createState() => new _HomePageState();
+  _HomePageState createState() =>  _HomePageState();
 }
-
-Future<List<AddressBook>> fetchEmployeesFromDatabase() async {
-  var dbHelper = DBHelper();
-  Future<List<AddressBook>> employees = dbHelper.getAddressBooks();
-  return employees;
-}
-
-class _HomePageState extends State<HomeScreen> {
+class _HomePageState extends State {
   var facebookLogin = FacebookLogin();
+  var dbHelper = DBHelper();
+  var count = 0;
+  List<AddressBook> allAddressBook;
 
   @override
   void initState() {
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
-    var futureBuilder = new FutureBuilder(
-      future: fetchEmployeesFromDatabase(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        // list design layout
-        return createListView(context, snapshot);
-      },
-    );
-
-    return new Scaffold(
-      appBar: new AppBar(
+    if (allAddressBook == null) {
+      allAddressBook = List<AddressBook>();
+      getData();
+    }
+    return  Scaffold(
+      appBar:  AppBar(
         title: Text(globals.app_name),
         centerTitle: true,
         backgroundColor: globals.barColor,
         actions: <Widget>[
-          new IconButton(
-              icon: new Icon(Icons.settings_power), onPressed: _logout),
+           IconButton(
+              icon:  Icon(Icons.settings_power), onPressed: _logout),
         ],
       ),
+      body: createListView(),
       floatingActionButton: FloatingActionButton(
           backgroundColor: globals.greenThemeColor,
           child: Icon(
@@ -57,7 +50,6 @@ class _HomePageState extends State<HomeScreen> {
               navigateUpdateScreen(null);
             });
           }),
-      body: futureBuilder,
     );
   }
 
@@ -65,38 +57,37 @@ class _HomePageState extends State<HomeScreen> {
      * this method is called when user click on item in the list.
      * Parameters context = pass the context of screen
      * Paremeters addressbooks_item = the item row data passed in intent
-     */
+   */
   void _onTapItem(BuildContext context, AddressBook addressbooks_item) {
     navigateUpdateScreen(addressbooks_item);
   }
 
   /*
-     * navigate to update screen
-     * Parameters addressbooks = passed the item row data.
-     */
-  void navigateUpdateScreen(AddressBook addressbooks) {
-    Navigator.push(
+     navigate to update screen
+     Parameters addressbooks = passed the item row data.
+  */
+  void navigateUpdateScreen(AddressBook addressbooks) async{
+
+     bool result = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => UpdateScreen(addressbooks: addressbooks)),
     );
+    if(result!=null){
+   getData();
+    }
   }
 
-  /*
-     * logout method
-     */
+  // logout method
   void _logout() {
     setState(() {
       _clearUser();
     });
   }
 
-  /*
-     * async call for logout from facebook and app
-     */
   _clearUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
+  //remove data from shared preference
     if (prefs.getBool(globals.user_fb_logged_in)) {
       prefs.setBool(globals.user_fb_logged_in, false);
       await facebookLogin.logOut();
@@ -109,59 +100,75 @@ class _HomePageState extends State<HomeScreen> {
       Navigator.pushReplacement(context, route);
     });
   }
+  //Generate address book List
 
-  /*
-     * widget to design listview layout
-     * Parameters context = passed the context of screen
-     * Parameters snapshot = passed the builder snapshot
-     */
-  Widget createListView(BuildContext context, AsyncSnapshot snapshot) {
-    List<AddressBook> values = snapshot.data;
-    return new ListView.builder(
-      itemCount: values != null ? values.length : 0,
+  Widget createListView() {
+
+    return  ListView.builder(
+      itemCount: count,
       padding: const EdgeInsets.all(10.0),
       itemBuilder: (BuildContext context, int index) {
         return GestureDetector(
-          onTap: () => _onTapItem(context, values[index]),
-          child: new Column(
+          onTap: () => _onTapItem(context, this.allAddressBook[index]),
+          child:  Column(
             children: <Widget>[
+               Padding(
+                  padding: const EdgeInsets.only(top: 10)),
+               SizedBox(
+                width: double.infinity,
+                child:  Text(
+                  this.allAddressBook[index].name,
+                  textAlign: TextAlign.start,
+                  style:  TextStyle(color: Colors.black),
+                ),
+              ),
+               Padding(
+                  padding: const EdgeInsets.only(bottom: 5)),
+               SizedBox(
+                width: double.infinity,
+                child:  Text(
+                  this.allAddressBook[index].email,
+                  textAlign: TextAlign.start,
+                  style:  TextStyle(color: Colors.black),
+                ),
+              ),
+               Padding(
+                  padding: const EdgeInsets.only(bottom: 5)),
+               SizedBox(
+                width: double.infinity,
+                child:  Text(
+                  this.allAddressBook[index].contact_number,
+                  textAlign: TextAlign.start,
+                  style:  TextStyle(color: Colors.black),
+                ),
+              ),
+               Padding(
+                  padding: const EdgeInsets.only(bottom: 5)),
               Divider(height: 5.0),
-              new Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0)),
-              new SizedBox(
-                width: double.infinity,
-                child: new Text(
-                  '${values[index].name}',
-                  textAlign: TextAlign.start,
-                  style: new TextStyle(color: Colors.black),
-                ),
-              ),
-              new Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 5.0)),
-              new SizedBox(
-                width: double.infinity,
-                child: new Text(
-                  '${values[index].email}',
-                  textAlign: TextAlign.start,
-                  style: new TextStyle(color: Colors.black),
-                ),
-              ),
-              new Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 5.0)),
-              new SizedBox(
-                width: double.infinity,
-                child: new Text(
-                  '${values[index].contact_number}',
-                  textAlign: TextAlign.start,
-                  style: new TextStyle(color: Colors.black),
-                ),
-              ),
-              new Padding(
-                  padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0)),
             ],
+
           ),
         );
       },
     );
   }
+  //retrieve data from database
+  void getData() {
+    final dbFuture = dbHelper.initializeDb();
+    dbFuture.then((result) {
+      final addressBookFuture = dbHelper.getAddressBooks();
+      addressBookFuture.then((result) {
+        List<AddressBook> bookList = List<AddressBook>();
+        count = result.length;
+        for (int i = 0; i < count; i++) {
+          bookList.add(AddressBook.fromObject(result[i]));
+        }
+        setState(() {
+          allAddressBook = bookList;
+          count = count;
+        });
+      });
+    });
+  }
+
 }

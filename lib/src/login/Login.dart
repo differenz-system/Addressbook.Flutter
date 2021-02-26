@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:addressbook_flutter/src/customWidgets/MyButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,15 +13,15 @@ import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class Login extends StatefulWidget {
   @override
-  _LoginPageState createState() => new _LoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<Login> {
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   String _connectionStatus;
-  final Connectivity _connectivity = new Connectivity();
+  final Connectivity _connectivity = Connectivity();
 
   //For subscription to the ConnectivityResult stream
   StreamSubscription<ConnectivityResult> _connectionSubscription;
@@ -29,8 +29,8 @@ class _LoginPageState extends State<Login> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
 
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
-  final formKey = new GlobalKey<FormState>();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final formKey = GlobalKey<FormState>();
 
   bool isLoggedIn = false;
   var profileData;
@@ -73,8 +73,7 @@ class _LoginPageState extends State<Login> {
 
   // initialize the facebook login
   void initiateFacebookLogin() async {
-    var facebookLoginResult =
-        await facebookLogin.logInWithReadPermissions(['email']);
+    var facebookLoginResult = await facebookLogin.logIn(['email']);
 
     switch (facebookLoginResult.status) {
       case FacebookLoginStatus.error:
@@ -87,7 +86,7 @@ class _LoginPageState extends State<Login> {
         break;
       case FacebookLoginStatus.loggedIn:
         var graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${facebookLoginResult.accessToken.token}');
+            'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=$facebookLoginResult.accessToken.token}');
 
         var profile = json.decode(graphResponse.body);
         print(profile.toString());
@@ -128,23 +127,25 @@ class _LoginPageState extends State<Login> {
         initiateFacebookLogin();
       } else {
         // call signin method
-        scaffoldKey.currentState.showSnackBar(new SnackBar(
-          duration: new Duration(seconds: 4),
-          content: new Row(
-            children: <Widget>[
-              new CircularProgressIndicator(),
-              new Text("  Signing-In...")
-            ],
+        scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            duration: Duration(seconds: 4),
+            content: Row(
+              children: <Widget>[
+                CircularProgressIndicator(),
+                Text("  Signing-In...")
+              ],
+            ),
           ),
-        ));
+        );
         fetchPost(emailController.text, passwordController.text)
             .whenComplete(() => navigateHomePage(emailController.text, false));
       }
     } else {
-      scaffoldKey.currentState.showSnackBar(new SnackBar(
-        duration: new Duration(seconds: 2),
-        content: new Row(
-          children: <Widget>[new Text("  No Internet Connection")],
+      scaffoldKey.currentState.showSnackBar(SnackBar(
+        duration: Duration(seconds: 2),
+        content: Row(
+          children: <Widget>[Text("  No Internet Connection")],
         ),
       ));
     }
@@ -158,7 +159,6 @@ class _LoginPageState extends State<Login> {
 
     if (form.validate()) {
       form.save();
-
       initConnectivity(false);
     }
   }
@@ -179,26 +179,26 @@ class _LoginPageState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new Scaffold(
+    return Scaffold(
       key: scaffoldKey,
       backgroundColor: globals.bgColor,
-      appBar: new AppBar(
+      appBar: AppBar(
         backgroundColor: globals.barColor,
         centerTitle: true,
-        title: new Text(globals.login),
+        title: Text(globals.login),
       ),
-      body: new SingleChildScrollView(
-        child: new Padding(
+      body: SingleChildScrollView(
+        child: Padding(
           padding: const EdgeInsets.fromLTRB(50.0, 60.0, 50.0, 0.0),
-          child: new Form(
+          child: Form(
               key: formKey,
-              child: new Container(
-                child: new Stack(
+              child: Container(
+                child: Stack(
                   children: <Widget>[
                     Container(
-                      child: new Column(
+                      child: Column(
                         children: <Widget>[
-                          new TextFormField(
+                          TextFormField(
                             controller: emailController,
                             focusNode: _emailFocus,
                             onFieldSubmitted: (term) {
@@ -208,90 +208,64 @@ class _LoginPageState extends State<Login> {
                             keyboardType: TextInputType.emailAddress,
                             textInputAction: TextInputAction.next,
                             decoration:
-                                new InputDecoration(labelText: globals.email),
+                                InputDecoration(labelText: globals.email),
                             validator: (val) => !globals.validateEmail(val)
                                 ? globals.invalid_email
                                 : null,
                             onSaved: (val) => _email = val,
                           ),
-                          new Padding(
+                          Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
                           ),
-                          new TextFormField(
+                          TextFormField(
                             focusNode: _passwordFocus,
                             controller: passwordController,
                             textInputAction: TextInputAction.done,
-                            decoration: new InputDecoration(
-                                labelText: globals.password),
+                            decoration:
+                                InputDecoration(labelText: globals.password),
                             validator: (val) => val.length < 6
                                 ? globals.min_length_password
                                 : null,
                             onSaved: (val) => _password = val,
                             obscureText: true,
                           ),
-                          new Padding(
+                          Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(0.0, 75.0, 0.0, 0.0),
                           ),
-                          new SizedBox(
+                          SizedBox(
                             width: double.infinity,
                             // height: double.infinity,
-                            child: new RaisedButton(
-                                padding: const EdgeInsets.fromLTRB(
-                                    0.0, 15.0, 0.0, 15.0),
-                                child: new Text(
-                                  globals.log_in,
-                                  style: new TextStyle(color: Colors.white),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6.0)),
-                                color: globals.greenThemeColor,
-                                onPressed: () {
-                                  _submit();
-                                }),
+                            child: MyButton(
+                              titleText: globals.log_in,
+                              onPressed: () {
+                                _submit();
+                              },
+                            ),
                           ),
-                          new Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30.0),
                           ),
-                          new Text(globals.or,
+                          Text(globals.or,
                               textAlign: TextAlign.center,
-                              style: new TextStyle(color: Colors.black)),
-                          new Padding(
-                            padding:
-                                const EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0),
+                              style: TextStyle(color: Colors.black)),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30.0),
                           ),
-                          new SizedBox(
+                          SizedBox(
                             width: double.infinity,
                             // height: double.infinity,
-                            child: new RaisedButton(
-                                padding: const EdgeInsets.fromLTRB(
-                                    0.0, 15.0, 0.0, 15.0),
-                                child: new Text(
-                                  globals.login_with_facebook,
-                                  style: new TextStyle(color: Colors.white),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(6.0)),
-                                color: globals.greenThemeColor,
-                                onPressed: () {
-                                  initConnectivity(true);
-                                }),
+                            child: MyButton(
+                              titleText: globals.login_with_facebook,
+                              onPressed: () {
+                                initConnectivity(true);
+                              },
+                            ),
                           ),
                         ],
                       ),
                     ),
-                    /*Container(
-                    child: Center(
-                      child: Container(
-                        child: CircularProgressIndicator(
-                          key: circularKey,
-                          backgroundColor: Colors.transparent,
-                        ),
-                      ),
-                    ),
-                  ),*/
                   ],
                 ),
               )),
@@ -318,21 +292,22 @@ class _LoginPageState extends State<Login> {
         body: {"email": str_email, "password": str_password});
 
     if (response.statusCode == 200) {
+
       // If the call to the server was successful, parse the JSON
 
-      print("Response body: ${response.body}");
+      print("Response body: $response.body");
 
       var loginResponseModel =
           LoginResponseModel.fromJson(jsonDecode(response.body));
 
       String str_json = loginResponseModel.json.toString();
-      print("str_json : ${str_json}");
+      print("str_json : $str_json");
 
       Map<String, dynamic> user = loginResponseModel.json;
 
       String email = user['email'];
 
-      print("Response body: ${email}");
+      print("Response body: $email");
 
       return null;
     } else {

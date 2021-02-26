@@ -33,20 +33,20 @@ final String min_length_password = 'Password must be minimum of 6 characters';
 
 final String base_url = 'https://postman-echo.com/post';
 
-/**
+/*
  * this method is to check email validation
  * paramater value is passed as email
  */
 bool validateEmail(String value) {
   Pattern pattern =
       r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regex = new RegExp(pattern);
+  RegExp regex =  RegExp(pattern);
   if (!regex.hasMatch(value))
     return false;
   else
     return true;
 }
-/**
+/*
  * this method is to show short toast message
  * paramater toast_msg is passed to display
  */
@@ -55,21 +55,17 @@ void showShortToast(String toast_msg) {
     msg: toast_msg,
     toastLength: Toast.LENGTH_SHORT,
     gravity: ToastGravity.CENTER,
-    timeInSecForIos: 1,
+    timeInSecForIosWeb: 1,
   );
 }
 
-/**
- * this method is to show long toast message
- * paramater toast_msg is passed to display
- */
 void showLongToast(String toast_msg) {
 
   Fluttertoast.showToast(
     msg: toast_msg,
     toastLength: Toast.LENGTH_LONG,
     gravity: ToastGravity.CENTER,
-    timeInSecForIos: 2,
+    timeInSecForIosWeb: 2,
   );
 
 }
