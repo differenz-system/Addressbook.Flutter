@@ -9,10 +9,10 @@ The app does the following:
 3. **Create new contact:** User can add a new contact to his address book by filling details here.
 
 ## Pre-requisites
-- Android device or emulator running API 16 (4.0.3 - Ice cream sandwich) or above
-- [Android SDK 27](https://developer.android.com/about/versions/oreo/android-8.0-migration.html#ptb)
-- [Android Studio 2.3.0+](https://developer.android.com/studio/index.html)
-- [Xcode 9 or above](https://developer.apple.com/xcode)
+- Android device or emulator running API 21 (Android 5.0) or above
+- [Android SDK 34](https://developer.android.com/tools/releases/platforms)
+- [Android Studio Hedgehog](https://developer.android.com/studio/releases)
+- [Xcode 15 or above](https://developer.apple.com/xcode)
 - [Visual Studio code](https://code.visualstudio.com/download)
 
 ## Getting Started
