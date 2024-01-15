@@ -4,7 +4,7 @@
 This repository contains Address Book application using Flutter that shows design & coding practices followed by **[Differenz System](http://www.differenzsystem.com/)**.
 
 The app does the following:
-1. **Login:** User can login via facebook or email/password. 
+1. **Login:** User can login via email/password. 
 2. **Home:** It will list all the save contacts, having the option to add a new contact on the top right.
 3. **Create new contact:** User can add a new contact to his address book by filling details here.
 
@@ -29,7 +29,6 @@ The app does the following:
 
 ## Key Tools & Technologies
 - **Database:** sqflite
-- **Authentication:** Facebook login
 - **API/Service calls:** http API
 - **IDE:** Android studio, Xcode, VSCode
 - **Framework:** Flutter
