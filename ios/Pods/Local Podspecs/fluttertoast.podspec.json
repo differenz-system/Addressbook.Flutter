@@ -23,7 +23,15 @@
 
     ]
   },
+  "pod_target_xcconfig": {
+    "VALID_ARCHS": "x86_64 armv7 arm64",
+    "DEFINES_MODULE": "YES"
+  },
   "platforms": {
-    "ios": "8.0"
+    "osx": null,
+    "ios": null,
+    "tvos": null,
+    "visionos": null,
+    "watchos": null
   }
 }
