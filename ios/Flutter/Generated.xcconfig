@@ -1,6 +1,6 @@
 // This is a generated file; do not edit or check into version control.
-FLUTTER_ROOT=/Users/differenz198/fvm/versions/3.13.6
-FLUTTER_APPLICATION_PATH=/Users/differenz198/Documents/GitHub/Addressbook.Flutter
+FLUTTER_ROOT=/Users/differenz57/Documents/flutter_sdk/flutter
+FLUTTER_APPLICATION_PATH=/Users/differenz57/Downloads/Addressbook.Flutter-master
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=lib/main.dart
 FLUTTER_BUILD_DIR=build

@@ -1,7 +1,7 @@
 # AddressBook.Flutter
 
 ## Overview
-This repository contains Address Book application using Flutter that shows design & coding practices followed by **[Differenz System](http://www.differenzsystem.com/)**.
+This repository contains Address Book application using Flutter that shows design & coding practices followed by **[Differenz System](https://www.differenzsystem.com/?tab=readme-ov-file&utm_source=github&utm_medium=Addressbook.Flutter)**.
 
 The app does the following:
 1. **Login:** User can login via email/password. 

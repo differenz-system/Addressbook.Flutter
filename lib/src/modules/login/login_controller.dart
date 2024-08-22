@@ -5,13 +5,13 @@ import 'dart:developer';
 import 'package:addressbook_flutter/src/model/login_response_model.dart';
 import 'package:addressbook_flutter/src/model/user_model.dart';
 import 'package:addressbook_flutter/src/modules/home/home_screen.dart';
+import 'package:addressbook_flutter/src/utils/globals.dart' as globals;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:addressbook_flutter/src/utils/globals.dart' as globals;
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 //Login controller is craeted for handling logic part of login screen
 class LoginController extends GetxController {
@@ -103,38 +103,42 @@ class LoginController extends GetxController {
     if (_connectionStatus == "ConnectivityResult.mobile" ||
         _connectionStatus == "ConnectivityResult.wifi") {
       // call signin method
-      Get.showSnackbar(GetSnackBar(
-        messageText: Row(
-          children: <Widget>[
-            CircularProgressIndicator(),
-            SizedBox(
-              width: 15.w,
-            ),
-            Text(
-              "Signing-In...",
-            )
-          ],
+      Get.showSnackbar(
+        GetSnackBar(
+          messageText: Row(
+            children: <Widget>[
+              CircularProgressIndicator(),
+              SizedBox(
+                width: 15.w,
+              ),
+              Text(
+                "Signing-In...",
+              )
+            ],
+          ),
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.white,
         ),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.white,
-      ));
+      );
 
       fetchPost(emailController.text, passwordController.text)
           .whenComplete(() => navigateHomePage(emailController.text));
     } else {
-      Get.showSnackbar(GetSnackBar(
-        messageText: Row(
-          children: <Widget>[
-            CircularProgressIndicator(),
-            SizedBox(
-              width: 15.w,
-            ),
-            Text("No Internet Connection")
-          ],
+      Get.showSnackbar(
+        GetSnackBar(
+          messageText: Row(
+            children: <Widget>[
+              CircularProgressIndicator(),
+              SizedBox(
+                width: 15.w,
+              ),
+              Text("No Internet Connection")
+            ],
+          ),
+          duration: Duration(seconds: 3),
+          backgroundColor: Colors.white,
         ),
-        duration: Duration(seconds: 3),
-        backgroundColor: Colors.white,
-      ));
+      );
     }
   }
 
