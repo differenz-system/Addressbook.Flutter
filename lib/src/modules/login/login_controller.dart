@@ -71,11 +71,28 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
     // initConnectivity(); before calling on button press
+
+    // // old code
+    // _connectionSubscription =
+    //     _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
+    //   _connectionStatus = result.toString();
+    //   update();
+    // }); // till here
+
     _connectionSubscription =
-        _connectivity.onConnectivityChanged.listen((ConnectivityResult result) {
-      _connectionStatus = result.toString();
-      update();
-    });
+    _connectivity.onConnectivityChanged.listen(
+      (List<ConnectivityResult> results) {
+        if (results.isNotEmpty) {
+          _connectionStatus = results.first.toString();
+        } else {
+          _connectionStatus = 'No Connection';
+        }
+        update();
+      },
+    ) as StreamSubscription<ConnectivityResult>;
+
+
+
     log("Initstate : $_connectionStatus");
   }
 

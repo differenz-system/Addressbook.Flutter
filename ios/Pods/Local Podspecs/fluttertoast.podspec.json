@@ -16,16 +16,15 @@
   "source_files": "Classes/**/*",
   "public_header_files": "Classes/**/*.h",
   "dependencies": {
-    "Flutter": [
-
-    ],
-    "Toast": [
-
-    ]
+    "Flutter": []
   },
   "pod_target_xcconfig": {
-    "VALID_ARCHS": "x86_64 armv7 arm64",
     "DEFINES_MODULE": "YES"
+  },
+  "resource_bundles": {
+    "fluttertoast_privacy": [
+      "Resources/PrivacyInfo.xcprivacy"
+    ]
   },
   "platforms": {
     "osx": null,
