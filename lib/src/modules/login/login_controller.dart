@@ -23,7 +23,9 @@ class LoginController extends GetxController {
   final Connectivity _connectivity = Connectivity();
 
   //For subscription to the ConnectivityResult stream
-  late StreamSubscription<ConnectivityResult> _connectionSubscription;
+  // late StreamSubscription<ConnectivityResult> _connectionSubscription;
+  late StreamSubscription<List<ConnectivityResult>> _connectionSubscription;
+
 
   //For handing focus on text feilds
   final FocusNode _emailFocusNode = FocusNode();
@@ -79,7 +81,7 @@ class LoginController extends GetxController {
     //   update();
     // }); // till here
 
-    _connectionSubscription =
+  _connectionSubscription =
     _connectivity.onConnectivityChanged.listen(
       (List<ConnectivityResult> results) {
         if (results.isNotEmpty) {
@@ -89,7 +91,7 @@ class LoginController extends GetxController {
         }
         update();
       },
-    ) as StreamSubscription<ConnectivityResult>;
+    ) ;
 
 
 
